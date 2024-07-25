@@ -90,10 +90,20 @@ module.exports = {
   findAll: async (req, res) => {
     try {
       const id = req.params.id;
-      const data = await Driver.find();
+      const data = await Driver.find({ isOnline: true });
       return res.status(OK).send({ data: data });
     } catch (err) {
       return res.status(OK).send({});
+    }
+  },
+
+  findByEmail: async (req, res) => {
+    try {
+      const email = req.body.email;
+      const data = await Driver.findOne({ email });
+      return res.status(OK).send(data);
+    } catch (err) {
+      return res.status(SERVER_ERROR).send({});
     }
   },
 
@@ -130,6 +140,39 @@ module.exports = {
       return res.status(SERVER_ERROR).send({ error: true, message: err });
     }
   },
+  toggleOnline: async (req, res) => {
+    try {
+      const { email, isOnline } = req.body;
+      const driver = await Driver.findOne({ email });
+      const body = { isOnline: isOnline };
+
+      const options = { new: true };
+
+      const result = await Driver.findByIdAndUpdate(driver._id, body, options);
+
+      return res.status(OK).send({ error: false, result });
+    } catch (err) {
+      return res.status(SERVER_ERROR).send({ error: true, message: err });
+    }
+  },
+
+  updatePosition: async (req, res) => {
+    try {
+      const { email, lon, lat } = req.body;
+
+      const body = { lon: lon, lat: lat };
+      const driver = await Driver.findOne({ email });
+
+      const options = { new: true };
+
+      const result = await Driver.findByIdAndUpdate(driver._id, body, options);
+
+      return res.status(OK).send({ error: false, result });
+    } catch (err) {
+      return res.status(SERVER_ERROR).send({ error: true, message: err });
+    }
+  },
+
   userData: async (req, res) => {
     try {
       return res

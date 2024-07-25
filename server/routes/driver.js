@@ -5,6 +5,9 @@ module.exports = (app) => {
   app.post(rootUrl("driver/create"), controller.create);
   app.get(rootUrl("driver/:id"), controller.findId);
   app.post(rootUrl("driver/list"), controller.findAll);
+  app.post(rootUrl("update/position"), controller.updatePosition);
+  app.post(rootUrl("findDriverByEmail"), controller.findByEmail);
+  app.post(rootUrl("update/toggleOnline"), controller.toggleOnline);
   app.post(rootUrl("findDriverOnline"), controller.findOnline);
   app.get(rootUrl("user-data"), controller.userData);
   app.delete(rootUrl("driver/:id"), controller.delete);
